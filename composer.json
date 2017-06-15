@@ -1,0 +1,16 @@
+{
+    "name": "axtg/settlebot",
+    "description": "Telegram bot that allows friends to settle open financials",
+    "type": "project",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Xander Groesbeek",
+            "email": "xander@groesbeek.at"
+        }
+    ],
+    "require": {
+        "php": "^7.0.10",
+        "globalcitizen/php-iban": "2.5.9"
+    }
+}

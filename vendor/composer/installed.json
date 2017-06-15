@@ -1,0 +1,32 @@
+[
+    {
+        "name": "globalcitizen/php-iban",
+        "version": "v2.5.9",
+        "version_normalized": "2.5.9.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/globalcitizen/php-iban.git",
+            "reference": "605202092da1160c7f61d7e8158b5bf54b8f5d93"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/globalcitizen/php-iban/zipball/605202092da1160c7f61d7e8158b5bf54b8f5d93",
+            "reference": "605202092da1160c7f61d7e8158b5bf54b8f5d93",
+            "shasum": ""
+        },
+        "time": "2016-10-02T16:00:06+00:00",
+        "type": "library",
+        "installation-source": "dist",
+        "autoload": {
+            "files": [
+                "oophp-iban.php",
+                "php-iban.php"
+            ]
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "LGPL-3.0"
+        ],
+        "description": "php-iban is a library for parsing and validating IBAN (and IIBAN) bank account information."
+    }
+]
