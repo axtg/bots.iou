@@ -1,4 +1,4 @@
-# SETTLEBOT FOR TELEGRAM
+# IOUBOT FOR TELEGRAM
 
 ## Introduction
 Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
@@ -8,7 +8,8 @@ consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
 cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
 proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
 
-**Live version [link](http://telegram.me/settlebot)**
+**Live version [link](http://telegram.me/ioubot)**
+_Note that this link is not yet active, pending a name change_
 
 
 ## Available commands 
@@ -35,10 +36,10 @@ All server generated responses are formatted using Markdown. Change parse_mode i
 
 ## Bot details
 *Botname*
-SettleBot
+IOUbot
 
 *In-app description* 
-Helps you settle payments between friends. So for me to work, add me to your friends' group chat. Then simply use /add $$.$$ to add an expense made (/add 10.50), and use /settle to have me calculate who ows what.
+Helps you settle payments between friends. So for the bot to work, add it to your friends' group chat. Then simply use /add $$.$$ to add an expense made (/add 10.50), and use /settle to let the bot calculate who ows what.
 
 
 ## License
