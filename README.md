@@ -1,5 +1,9 @@
 # IOUBOT FOR TELEGRAM
 
+
+[![Build Status](https://travis-ci.org/axtg/bots.iou.svg?branch=master)](https://travis-ci.org/axtg/bots.iou)
+
+
 ## Introduction
 Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
 tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
