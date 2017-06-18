@@ -563,28 +563,16 @@ elseif($chatID<0)
 			$stmt->bindValue(':chatID', $chatID, PDO::PARAM_INT);
 			$stmt->execute();
 
-			// Loop through all members and create individual buttons
-			$i=0;
-			$j=0;
-			
-			foreach ($stmt as $row) 
-			{ 
-				$fname = ($row['excluded']==1?"[X] ".$row['firstname']:$row['firstname']);
-			    $options[$j][] = array('text'=>$fname, 'callback_data'=>'/ignore '.$row['telegramID']);
-
-			    if(++$i % 3 == 0) // Iterate to next row after three columns
-			    { 
-			        $j++;
-			    }
+			foreach($stmt as $row)
+			{
+				$fname 		=($row['excluded']==1?"[X] ".$row['firstname']:$row['firstname']);
+				$options[]	=['text'=>urlencode($fname),'callback_data'=>'/ignore '.$row['telegramID']];
 			}
 
 			$reply 			 = "Select a group chat member that you would like to in- or exclude from ";
 			$reply 			.= "the current settlement. Use /plus if you would like to attribute someone a '+1'\n";
-			$keyb 			 = array('inline_keyboard' => $options);
-			$replyMarkup 	 = json_encode($keyb);
-			
-			// Send options
-			sendMessage($chatID, $reply, $replyMarkup);
+
+			sendMessage($chatID, $reply, json_encode(['inline_keyboard'=>array_chunk($options,3)]));
 			exit();
 		}
 		// Run when a user is specified
@@ -686,16 +674,9 @@ elseif($chatID<0)
 		$stmt->execute();
 
 		// Loop through all members and create individual buttons
-		$i=0;
-		$j=0;
-
-		foreach ($stmt as $row) 
-		{ 
-		    $options[$j][] = array('text'=>urlencode($row['firstname'])." (%2B".($row['plus']-1).")", 'callback_data'=>'/plus '.$row['telegramID']);
-		    if(++$i % 3 == 0) // Iterate to next row after three columns
-		    { 
-		        $j++;
-		    }
+		foreach($stmt as $row)
+		{
+			$options[]	=['text'=>urlencode($row['firstname'])." (%2B".($row['plus']-1).")",'callback_data'=>'/plus '.$row['telegramID']];
 		}
 
 		// [MSG_SUCCESS]
@@ -707,11 +688,9 @@ elseif($chatID<0)
 			$reply 		.= "Add up to four '+1's per person, click a name to add one, ";
 			$reply 		.= "five clicks resets the count to 0. Or /settle instead.";
 		}
-		$keyb 		 = array('inline_keyboard' => $options);
-		$replyMarkup = json_encode($keyb);
-
+		
 		// Send options
-		sendMessage($chatID, $reply, $replyMarkup);
+		sendMessage($chatID, $reply, json_encode(['inline_keyboard'=>array_chunk($options,3)]));
 		exit();
 	} 
 
@@ -833,7 +812,7 @@ elseif (stripos($message, '/list') !== false)
 	// Set variables
 	$groupID = ($chatID>0?preg_replace("/[^0-9-]/", "", $message):$chatID);
 
-	// A list of transactions for what group?
+	// In individual chat, a list of transactions for what group?
 	if ($groupID>0 || empty($groupID) || !is_numeric($groupID)) 
 	{
 		// Get all the groups this member is a part of
@@ -847,26 +826,19 @@ elseif (stripos($message, '/list') !== false)
 		if($stmt->rowCount()>0) 
 		{
 			// Loop through all groups and create individual buttons
-			$i=0;
-			$j=0;
-
-			foreach ($stmt as $row) 
-			{ 
-			    $options[$j][] = array('text'=>urlencode($row['title']), 'callback_data'=>'/list '.$row['chatID']);
-			    if(++$i % 3 == 0) // Iterate to next row after three columns
-			    { 
-			        $j++;
-			    }
+			foreach($stmt as $row)
+			{
+				$options[]	=['text'=>urlencode($row['title']),'callback_data'=>'/list '.$row['chatID']];
 			}	
-
-			$reply 			= "Select a chat group you want to view transactions for.";
-			$keyb 			= array('inline_keyboard' => $options);
-			$replyMarkup 	= json_encode($keyb);
+			
+			// Send options
+			$reply = "Select the desired group.";
+			sendMessage($chatID, $reply, json_encode(['inline_keyboard'=>array_chunk($options,3)]));
+			exit();
 		}
 		else
 		{
-			$reply 		 = "I can't find any transactions for you in any chat group.";
-			$replyMarkup = NULL;
+			$reply = "I can't find any transactions for you in any chat group.";
 		}
 	}
 
@@ -886,7 +858,6 @@ elseif (stripos($message, '/list') !== false)
 			$reply = ucfirst($firstname).", these are your unsettled transactions:";
 			foreach ($transactions as $row) {
 				$reply .= "\n\u{25AA} ".$row['amount']." from ".date("D j F Y", strtotime($row['created_at']));
-				$replyMarkup = NULL;
 			}
 		} 
 		else 
@@ -894,12 +865,11 @@ elseif (stripos($message, '/list') !== false)
 			// [MSG_FAIL]
 			$reply  = ucfirst($firstname).", I couldn't find any transactions for you. "; 
 			$reply .= "Are there any \u{1F914}? Are you perhaps currently excluded?";
-			$replyMarkup = NULL;
 		}
 	}
 
 	// Send options
-	sendMessage($chatID, $reply, $replyMarkup);
+	sendMessage($chatID, $reply);
 	exit();
 }
 
