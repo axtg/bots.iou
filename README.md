@@ -22,9 +22,9 @@ _Note that this link is not yet active, pending a name change_
 * getiban - Shows IBANs from current chat group members
 
 _Those that require user input_
-* paid <amount>
-* setiban <iban>
-* ignore <user>
+* paid + *amount*
+* setiban + *iban*
+* ignore + *user*
 
 
 ## Compatibility
@@ -39,7 +39,7 @@ All server generated responses are formatted using Markdown. Change parse_mode i
 SettleBot
 
 *In-app description* 
-Helps you settle payments between friends. So for the bot to work, add it to your friends' group chat. Then simply use /add $$.$$ to add an expense made (/add 10.50), and use /settle to let the bot calculate who ows what.
+Helps you settle payments between friends. So for the bot to work, add it to your friends' group chat. Then simply use /paid $$.$$ to add an expense made (/paid 10.50), and use /settle to let the bot calculate who ows what.
 
 
 ## License
