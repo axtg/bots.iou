@@ -1,8 +1,4 @@
-<<<<<<< HEAD
 # SETTLEBOT FOR TELEGRAM
-=======
-# IOUBOT FOR TELEGRAM
->>>>>>> origin/master
 
 ## Introduction
 Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
