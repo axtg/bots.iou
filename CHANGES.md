@@ -1,14 +1,16 @@
 # CURRENT BUILT
 Version 0.9
-Built 52, 15 June 2017
+Built 56, 30 June 2017
 
 
 # FUNCTIONALITY ROADMAP
 * [ ] Include `/getiban` in individual chat
-* [ ] Add `/export` command - _save /settle, /suggest to PNG file, v2.0_
-* [X] Add `/join` command to not require adding amount for discovery
+* [ ] Add `/export` to PNG command for settle or suggestion _v2.0_
+* [X] Update new user response to register user
+* [X] Update gone use response to delete user data for current group
+* [X] Add `/settlehi` command to not require adding amount for discovery
 * [X] Add command `/plus`: add 1, 2 or 3 for one group member
-* [X] Allow for calculation while `/add`; e.g. `/add 10+5+12`
+* [X] Allow for calculation while `/paid`; e.g. `/paid 10+5+12`
 * [X] Allow for individual chat functions
 * [X] Offer opportunity to exclude group chat member
 * [X] Create `/suggest` command to help settle expenses
@@ -23,16 +25,18 @@ Built 52, 15 June 2017
 * [X] Fix URL chars in inline buttons
 
 ## Medium
-* [ ] Solve for duplicate chat group member names (Use initials? Nicknames?)
-* [X] Fix empty message when `/list` without being registrated in any group
-* [X] Fix empty message at individual `/list` chat when empty
+* [ ] Fix missing IBAN on user add
+* [X] Solve common commands (`/help`, `/hi`, `/add`, `/list`)
+* [X] Removed gimmick responses on e.g. photo change or group name change
+* [X] Fix empty message when `/payments` without being registrated in any group
+* [X] Fix empty message at individual `/payments` chat when empty
 * [X] Mark excluded people at `/ignore` command (markdown ~~ not supported)
 * [X] Set excluded to 0 for all at `/reset`
 * [X] Make `/plus` command for 1 chat group, not one user for all his/ her chat groups
 * [X] Set all to include after `/reset`
-* [X]	Fixed wrong message for `/suggest` if all paid exact same amount 
+* [X] Fixed wrong message for `/suggest` if all paid exact same amount 
 
 ## Low
-* [ ] Delete group left user data
-* [ ] Query whether someone is excluded when using `/list` returning zero results
-* [X] Respond to title, photo, member change
+* [ ] Solve for duplicate chat group member names (Use initials? Nicknames?)
+* [ ] Query whether someone is excluded when using `/payments` returning zero results
+* [X] Respond to title, photo, member change [removed]

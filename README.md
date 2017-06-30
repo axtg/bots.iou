@@ -1,8 +1,4 @@
-# IOUBOT FOR TELEGRAM
-
-
-[![Build Status](https://travis-ci.org/axtg/bots.iou.svg?branch=master)](https://travis-ci.org/axtg/bots.iou)
-
+# SETTLEBOT FOR TELEGRAM
 
 ## Introduction
 Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
@@ -12,21 +8,21 @@ consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
 cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
 proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
 
-**Live version [link](http://telegram.me/ioubot)**
+**Live version [link](http://telegram.me/settlebot)**
 _Note that this link is not yet active, pending a name change_
 
 
 ## Available commands 
-* help - Basic info on how to use this bot
-* list - Shows your list of transactions 
+* settlehelp - Basic info on how to use this bot
+* payments - Show your list of payments for this group (group)
 * settle - Calculates the latest settlement status (group)
-* suggest - Offers a suggestion how to divide the payment (group)
+* suggest - Ask for a settlement payment suggestion (group)
 * ignore - In- or excludes a group chat member from the settlement (group)
 * plus - Adds a +1 to an individual group chat member (group)
 * getiban - Shows IBANs from current chat group members
 
 _Those that require user input_
-* add <amount>
+* paid <amount>
 * setiban <iban>
 * ignore <user>
 
@@ -40,7 +36,7 @@ All server generated responses are formatted using Markdown. Change parse_mode i
 
 ## Bot details
 *Botname*
-IOUbot
+SettleBot
 
 *In-app description* 
 Helps you settle payments between friends. So for the bot to work, add it to your friends' group chat. Then simply use /add $$.$$ to add an expense made (/add 10.50), and use /settle to let the bot calculate who ows what.
