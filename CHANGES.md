@@ -1,11 +1,12 @@
 # CURRENT BUILT
 Version 0.9
-Built 57, 1 July 2017
+Built 58, 3 July 2017
 
 
 # FUNCTIONALITY ROADMAP
 * [ ] Include `/getiban` in individual chat
 * [ ] Add `/export` to PNG command for settle or suggestion _v2.0_
+* [X] Adopted foreign key logic in database model
 * [X] Update new user response to register user
 * [X] Update gone use response to delete user data for current group
 * [X] Add `/settlehi` command to not require adding amount for discovery
@@ -25,7 +26,8 @@ Built 57, 1 July 2017
 * [X] Fix URL chars in inline buttons
 
 ## Medium
-* [ ] Fix missing IBAN on user add
+* [X] Fix missing IBAN on user add
+* [X] Fix unstable excluded functionality check
 * [X] Solve common commands (`/help`, `/hi`, `/add`, `/list`)
 * [X] Removed gimmick responses on e.g. photo change or group name change
 * [X] Fix empty message when `/payments` without being registrated in any group

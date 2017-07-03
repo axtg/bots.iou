@@ -13,6 +13,10 @@ include 'functions.php';
 define('BOT_TOKEN', '');
 define('API_URL', 'https://api.telegram.org/bot'.BOT_TOKEN.'/');
 
+// Bot telegram ID (for exclusion purpose)
+$cfg["botID"]	= '0000000000000000';
+$cfg["botUser"]	= 'UNIQUE_USER_NAME';
+
 // MySQL variables
 $db_host = 'localhost';
 $db_name = '';

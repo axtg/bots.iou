@@ -73,10 +73,10 @@ if($chatID>0)
 {
 
 	//
-	// I1. Command /start or /settlehelp
+	// I1. Command /start or /help
 	//     To show some basic instructions how to use this bot
 	//
-	if(stripos($message, '/start') !== false || stripos($message, '/settlehelp') !== false) 
+	if(stripos($message, '/start') !== false || stripos($message, '/help') !== false) 
 	{
 		// [MSG_FAIL]
 		$reply	= "Hi $firstname!\n";
@@ -115,10 +115,10 @@ elseif($chatID<0)
 {
 
 	// 
-	// G1. Command /start or /settlehelp
+	// G1. Command /start or /help
 	//     To show some basic instructions how to use this bot
 	//
-	if(stripos($message, '/start') !== false || stripos($message, '/settlehelp') !== false) 
+	if(stripos($message, '/start') !== false || stripos($message, '/help') !== false) 
 	{
 		// [MSG_SUCCESS]
 		$reply  = "Hi there $firstname!\n\n";
@@ -149,8 +149,9 @@ elseif($chatID<0)
 		$exc->bindValue(':chatID', $chatID, PDO::PARAM_INT);
 		$exc->bindValue(':telegramID', $fromID, PDO::PARAM_INT);
 		$exc->execute();
+		$exclude = $exc->fetch();
 		
-		if($exc->fetchColumn(0)==1) 
+		if($exclude['excluded']==1) 
 		{
 			$reply = "Can't do ".ucfirst($firstname)."!\nYou are currently excluded from settlements in this group.";
 		}
@@ -169,11 +170,12 @@ elseif($chatID<0)
 
 				// Get existing IBAN if any
 				$iban = $dbh->prepare("SELECT iban 
-										FROM sb_users
-										WHERE telegramID=:telegramID");
+										FROM sb_users 
+										WHERE telegramID=:telegramID AND iban IS NOT NULL");
 				$iban->bindParam(':telegramID', $fromID, PDO::PARAM_INT);
 				$iban->execute();
-				$iban = (verify_iban($iban->fetchColumn(0))?$iban->fetchColumn(0):NULL);
+				$iban = $iban->fetch();
+				$iban = (!empty($iban["iban"])?$iban["iban"]:NULL);
 
 				// Do database insert/ update query for user in this group
 				$stmt = $dbh->prepare("INSERT INTO sb_users (telegramID, chatID, title, firstname, lastname, nickname, iban) 
@@ -245,7 +247,7 @@ elseif($chatID<0)
 		if($ibans->rowCount()>0) 
 		{
 			// [MSG_SUCCESS]
-			$reply = ucfirst($firstname).", these are the IBANs I have on file:";
+			$reply = "These are the IBANs I have on file:";
 			foreach ($ibans as $row) {
 				$reply .= "\n- ".ucfirst($row['firstname']).": `".strtoupper($row['iban']."`");
 			}
@@ -367,7 +369,7 @@ elseif($chatID<0)
 				// [MSG_SUCCESS] Ask for next step, provide inline keyboard
 				$reply 	 = "*So what is next?*";
 				$reply 	.= "\nNeed help to decide who pays what to whom? ";
-				$reply 	.= "Maybe in- or exclude a group chat member from this settlement? ";
+				$reply 	.= "Maybe include or exclude a group chat member from this settlement? ";
 				$reply  .= "Or add a '+1' for someone?";
 				$keyb 	= array('inline_keyboard' => array(
 								array(
@@ -494,7 +496,7 @@ elseif($chatID<0)
 				sleep(3);
 
 				// [MSG_SUCCESS] Propose next step
-				$reply 	 = "Does this calculation need adjustment? You can still in- or exclude a person, ";
+				$reply 	 = "Does this calculation need adjustment? You can still include or exclude a person, ";
 				$reply  .= "or add a '+1'. Otherwise, make the transfer and mark these as settled.";
 				$keyb 	 = array('inline_keyboard' => array(
 								array(
@@ -546,8 +548,8 @@ elseif($chatID<0)
 		if($stmt->execute())
 		{
 			// [MSG_SUCCESS] Build success reply to Telegram
-			$reply  = "Excellent! Everyone has paid their share \u{1F4B8}";
-			$reply .= "You can start adding new expenses. If needed, remember to re-include ";
+			$reply  = "\u{1F44D} Everyone paid their share.\n";
+			$reply .= "You can start adding new payments. If needed, remember to include ";
 			$reply .= "any previously excluded group chat members.";
 		}
 
@@ -583,7 +585,7 @@ elseif($chatID<0)
 				$options[]	=['text'=>urlencode($fname),'callback_data'=>'/ignore '.$row['telegramID']];
 			}
 
-			$reply 			 = "Select a group chat member that you would like to in- or exclude from ";
+			$reply 			 = "Select a group chat member that you would like to include or exclude from ";
 			$reply 			.= "the current settlement. Use /plus if you would like to attribute someone a '+1'\n";
 
 			sendMessage($chatID, $reply, json_encode(['inline_keyboard'=>array_chunk($options,3)]));
@@ -710,10 +712,10 @@ elseif($chatID<0)
 
 
 	// 
-	// G2. Command /settlehi
+	// G2. Command /hi
 	//     To allow a new member to join settlement without using /paid
 	//
-	elseif(stripos($message, '/settlehi') !== false) 
+	elseif(stripos($message, '/hi') !== false) 
 	{
 		// Get existing IBAN if any
 		$iban = $dbh->prepare("SELECT iban 
@@ -721,7 +723,8 @@ elseif($chatID<0)
 								WHERE telegramID=:telegramID");
 		$iban->bindParam(':telegramID', $fromID, PDO::PARAM_INT);
 		$iban->execute();
-		$iban = (verify_iban($iban->fetchColumn(0))?$iban->fetchColumn(0):NULL);
+		$iban = $iban->fetch();
+		$iban = (!empty($iban["iban"])?$iban["iban"]:NULL);
 		
 		// Do database query for user
 		$stmt = $dbh->prepare("INSERT INTO sb_users (telegramID, chatID, title, firstname, lastname, nickname, iban) 
@@ -740,7 +743,7 @@ elseif($chatID<0)
 		if($stmt->execute()) 
 		{
 			// [MSG_SUCCESS] Build success reply to Telegram
-			$reply  = "\u{1F590} Mucho gusto $firstname!\nWant to know what I can do? Check-out /settlehelp.";
+			$reply  = "\u{1F590} Mucho gusto $firstname!\nWant to know what I can do? Check-out /help.";
 		}
 
 		// Execute
@@ -798,7 +801,7 @@ if (stripos($message, '/setiban') !== false)
 		} 
 		else 
 		{
-			$reply  = "I don't think we have been properly introduced. Try `/settlehi` in any group chat first, ";
+			$reply  = "I don't think we have been properly introduced. Try `/hi` in any group chat first, ";
 			$reply .= "before setting you IBAN."; 
 		}
 	} 
@@ -923,31 +926,35 @@ elseif (isset($update["message"]["new_chat_members"]) && !empty($update["message
 		$newLname 	= $update["message"]["new_chat_members"][$i]["last_name"];		// cont'd (opt)
 		$newNname 	= $update["message"]["new_chat_members"][$i]["username"];		// cont'd (opt)
 
-		// Get existing IBAN if any
-		$iban = $dbh->prepare("SELECT iban 
-								FROM sb_users
-								WHERE telegramID=:telegramID");
-		$iban->bindParam(':telegramID', $newID, PDO::PARAM_INT);
-		$iban->execute();
-		$iban = (verify_iban($iban->fetchColumn(0))?$iban->fetchColumn(0):NULL);
-
-		// Do database query for user
-		$stmt = $dbh->prepare("INSERT INTO sb_users (telegramID, chatID, title, firstname, lastname, nickname, iban) 
-								VALUES (:telegramID, :chatID, :title, :firstname, :lastname, :nickname, :iban)
-								ON duplicate key 
-								UPDATE userID=LAST_INSERT_ID(userID), title=:title, firstname=:firstname, lastname=:lastname, nickname=:nickname, iban=:iban");
-		$stmt->bindParam(':telegramID', $newID, PDO::PARAM_INT);
-		$stmt->bindParam(':chatID', $chatID, PDO::PARAM_INT);
-		$stmt->bindParam(':title', $title, PDO::PARAM_STR);
-		$stmt->bindParam(':firstname', $newFname, PDO::PARAM_STR);
-		$stmt->bindParam(':lastname', $newLname, PDO::PARAM_STR);
-		$stmt->bindParam(':nickname', $newNname, PDO::PARAM_STR);
-		$stmt->bindParam(':iban', $iban, PDO::PARAM_STR);
-
-		// Execute the database statement
-		if($stmt->execute()) 
+		if($newID != $cfg["botID"] && $newNname != $cfg["botUser"])
 		{
-			$i++;
+			// Get existing IBAN if any
+			$iban = $dbh->prepare("SELECT iban 
+									FROM sb_users
+									WHERE telegramID=:telegramID");
+			$iban->bindParam(':telegramID', $newID, PDO::PARAM_INT);
+			$iban->execute();
+			$iban = $iban->fetch();
+			$iban = (!empty($iban["iban"])?$iban["iban"]:NULL);
+
+			// Do database query for user
+			$stmt = $dbh->prepare("INSERT INTO sb_users (telegramID, chatID, title, firstname, lastname, nickname, iban) 
+									VALUES (:telegramID, :chatID, :title, :firstname, :lastname, :nickname, :iban)
+									ON duplicate key 
+									UPDATE userID=LAST_INSERT_ID(userID), title=:title, firstname=:firstname, lastname=:lastname, nickname=:nickname, iban=:iban");
+			$stmt->bindParam(':telegramID', $newID, PDO::PARAM_INT);
+			$stmt->bindParam(':chatID', $chatID, PDO::PARAM_INT);
+			$stmt->bindParam(':title', $title, PDO::PARAM_STR);
+			$stmt->bindParam(':firstname', $newFname, PDO::PARAM_STR);
+			$stmt->bindParam(':lastname', $newLname, PDO::PARAM_STR);
+			$stmt->bindParam(':nickname', $newNname, PDO::PARAM_STR);
+			$stmt->bindParam(':iban', $iban, PDO::PARAM_STR);
+
+			// Execute the database statement
+			if($stmt->execute()) 
+			{
+				$i++;
+			}
 		}
 	} 
 	exit();
@@ -970,15 +977,16 @@ elseif (isset($update["message"]["left_chat_member"]) && $update["message"]["lef
 	$sum_query->bindParam(':chatID', $chatID, PDO::PARAM_INT);
 	$sum_query->bindParam(':settled', $zero, PDO::PARAM_INT);
 	$sum_query->execute();
-	$open_amount = $sum_query->fetchColumn(0);
+	$sum_query 	 = $sum_query->fetch();
+	$open_amount = $sum_query["sum"];
 
-	// Prepare delete statement
+	// Prepare delete statement (transactions via foreign key logic)
 	$stmt = $dbh->prepare("DELETE FROM sb_users 
 							WHERE telegramID = :telegramID AND chatID = :chatID");
 	$stmt->bindParam(':telegramID', $leftID, PDO::PARAM_INT);
 	$stmt->bindParam(':chatID', $chatID, PDO::PARAM_INT);
 	
-	if($stmt->execute() && $open_amount>0)
+	if($stmt->execute() && ($open_amount>0 || $open_amount<0))
 	{
 		$reply_group = "\u{1F4A1} ".ucfirst($leftFname)." left *$open_amount* worth of unsettled payments.";
 		sendMessage($chatID, $reply_group);
