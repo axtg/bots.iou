@@ -131,7 +131,7 @@ elseif($chatID<0)
 		$reply .= "Then type `/payments` to see all of your *unsettled* transactions. ";
 		$reply .= "Should a chat group member not be included in a current settlement? Exclude him or her ";
 		$reply .= "using the `/ignore` command. Or change someone's share if a '+1' is involved using `/plus`.\n";
-		$reply .= "Ultimately, you can propose to settle open expenses using `/settle`.\n\n\u{1F44B} Bye!";
+		$reply .= "Ultimately, you can calculate who owes what using `/settle`.\n\n\u{1F44B} Bye!";
 		sendMessage($chatID, $reply);
 		exit();
 	} 

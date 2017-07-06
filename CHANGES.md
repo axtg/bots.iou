@@ -1,6 +1,6 @@
 # CURRENT BUILT
 Version 0.9
-Built 58, 3 July 2017
+Built 59, 6 July 2017
 
 
 # FUNCTIONALITY ROADMAP
